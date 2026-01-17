@@ -32,9 +32,9 @@ export async function processOrderFulfillment(orderId: string, paidAmount: numbe
                 .where(eq(orders.orderId, orderId));
 
             // Notify Admin
-            const user = await db.query.users.findFirst({
+            const user = await db.query.loginUsers.findFirst({
                 where: eq(users.userId, order.userId || ''),
-                columns: { username: true, email: true }
+                columns: { username: true }
             }).catch(() => null);
 
             await notifyAdminPaymentSuccess({
@@ -42,7 +42,7 @@ export async function processOrderFulfillment(orderId: string, paidAmount: numbe
                 productName: "Payment (QR/Link)",
                 amount: order.amount,
                 username: user?.username,
-                email: user?.email,
+                email: order.email,
                 tradeNo: tradeNo
             });
         }
@@ -89,7 +89,7 @@ export async function processOrderFulfillment(orderId: string, paidAmount: numbe
                 // Notify Admin
                 const user = await db.query.loginUsers.findFirst({
                     where: eq(users.userId, order.userId || ''),
-                    columns: { username: true, email: true }
+                    columns: { username: true }
                 }).catch(() => null);
 
                 await notifyAdminPaymentSuccess({
@@ -97,7 +97,7 @@ export async function processOrderFulfillment(orderId: string, paidAmount: numbe
                     productName: product?.name || 'Shared Product',
                     amount: order.amount,
                     username: user?.username,
-                    email: user?.email,
+                    email: order.email,
                     tradeNo: tradeNo
                 });
 
@@ -112,7 +112,7 @@ export async function processOrderFulfillment(orderId: string, paidAmount: numbe
                 // Notify Admin
                 const user = await db.query.loginUsers.findFirst({
                     where: eq(users.userId, order.userId || ''),
-                    columns: { username: true, email: true }
+                    columns: { username: true }
                 }).catch(() => null);
 
                 await notifyAdminPaymentSuccess({
@@ -120,7 +120,7 @@ export async function processOrderFulfillment(orderId: string, paidAmount: numbe
                     productName: product?.name || 'Shared Product',
                     amount: order.amount,
                     username: user?.username,
-                    email: user?.email,
+                    email: order.email,
                     tradeNo: tradeNo
                 });
 
@@ -188,9 +188,9 @@ export async function processOrderFulfillment(orderId: string, paidAmount: numbe
             console.log(`[Fulfill] Order ${orderId} delivered successfully!`);
 
             // Notify Admin
-            const user = await db.query.users.findFirst({
+            const user = await db.query.loginUsers.findFirst({
                 where: eq(users.userId, order.userId || ''),
-                columns: { username: true, email: true }
+                columns: { username: true }
             }).catch(() => null);
 
             const product = await db.query.products.findFirst({
@@ -203,7 +203,7 @@ export async function processOrderFulfillment(orderId: string, paidAmount: numbe
                 productName: product?.name || 'Unknown Product',
                 amount: order.amount,
                 username: user?.username,
-                email: user?.email,
+                email: order.email,
                 tradeNo: tradeNo
             });
         } else {
@@ -214,9 +214,9 @@ export async function processOrderFulfillment(orderId: string, paidAmount: numbe
             console.log(`[Fulfill] Order ${orderId} marked as paid (no stock)`);
 
             // Notify Admin
-            const user = await db.query.users.findFirst({
+            const user = await db.query.loginUsers.findFirst({
                 where: eq(users.userId, order.userId || ''),
-                columns: { username: true, email: true }
+                columns: { username: true }
             }).catch(() => null);
 
             const product = await db.query.products.findFirst({
@@ -229,7 +229,7 @@ export async function processOrderFulfillment(orderId: string, paidAmount: numbe
                 productName: product?.name || 'Unknown Product',
                 amount: order.amount,
                 username: user?.username,
-                email: user?.email,
+                email: order.email,
                 tradeNo: tradeNo
             });
         }

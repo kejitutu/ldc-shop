@@ -41,7 +41,7 @@ interface Review {
     username: string
     rating: number
     comment: string | null
-    createdAt: Date | string
+    createdAt: Date | string | null
 }
 
 interface BuyContentProps {
